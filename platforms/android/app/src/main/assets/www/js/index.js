@@ -31,6 +31,8 @@ var app = new Framework7({
 });
   
 var mainView = app.views.create('.view-main');
-var tooltip = app.tooltip.get('.profile-link');
-// change tooltip text
-tooltip.setText('Profile');
+// navbar tooltip
+var navbarTooltip = app.tooltip.create({
+  targetEl: '.navbar-tooltip',
+  text: 'Verwenden Sie Ihre<br>CAS-Zugangsdaten<br>um die Funktionen der<br>App zu verwenden'
+});
