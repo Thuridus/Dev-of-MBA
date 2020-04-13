@@ -115,5 +115,8 @@ h1 {
     width: 100%;
 }
 .custom-button{
-    background-color: rgb(227,16,14);
+    background-color: rgb(227,16,14) !important;
+}
+.page-content{
+    padding: 20px;
 }

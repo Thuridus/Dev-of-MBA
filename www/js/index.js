@@ -17,17 +17,33 @@
  * under the License.
  */
 
+
+var $$ = Dom7;
+
 var app = new Framework7({
-    // App root element
-    root: '#app',
-    // App Name
-    name: 'CAS Planner',
-    // App id
-    id: 'www.famlovric.CAS_Planner',
-    // Enable swipe panel
-    panel: {
-      swipe: 'left',
-    },
+  // App root element
+  root: '#app',
+  // App Name
+  name: 'CAS Planner',
+  // App id
+  id: 'www.famlovric.CAS_Planner',
+  routes:[
+    {   
+        path: '/calendar/',
+        url: 'calendar.html',
+    },{
+        path: '/units/',
+        url: 'units.html',
+    }
+  ],
+  touch: {
+      fastClicks: true, 
+      tapHold: true
+  },
+  // Enable swipe panel
+  panel: {
+    swipe: 'left',
+  },
 });
   
 var mainView = app.views.create('.view-main');
@@ -38,6 +54,8 @@ var navbarTooltip = app.tooltip.create({
 });
 
 $$('.convert-form-to-data').on('click', function(){
-  var formData = app.form.convertToData('#my-form');
-  alert(JSON.stringify(formData));
+  var formData = app.form.convertToData('#Anmelde_Form');
+  console.log(formData);
+  // Da die Einbindung von Shiboleth nicht vorgesehen ist wird die Anmeldung immer akzeotiert.
+  app.views.get('.view-main').router.navigate('/Calendar/');
 });
