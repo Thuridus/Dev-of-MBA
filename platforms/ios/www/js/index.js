@@ -31,4 +31,13 @@ var app = new Framework7({
 });
   
 var mainView = app.views.create('.view-main');
+// navbar tooltip
+var navbarTooltip = app.tooltip.create({
+  targetEl: '.navbar-tooltip',
+  text: 'Verwenden Sie Ihre<br>CAS-Zugangsdaten<br>um die Funktionen der<br>App zu verwenden'
+});
 
+$$('.convert-form-to-data').on('click', function(){
+  var formData = app.form.convertToData('#my-form');
+  alert(JSON.stringify(formData));
+});

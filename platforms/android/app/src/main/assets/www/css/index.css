@@ -105,3 +105,12 @@ h1 {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
 }
+
+#login-icon{
+    width: 80%;
+    margin: 35px auto 15px;
+    padding-right: 25px;
+}
+#login-icon img{
+    width: 100%;
+}
