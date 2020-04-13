@@ -28,22 +28,55 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
         <link rel="stylesheet" type="text/css" href="css/index.css">
-        <title>Hello World</title>
+        <link rel="stylesheet" type="text/css" href="css/framework7.bundle.min.css">
+        <title>CAS Planner</title>
     </head>
     <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+        <div id="app">
+
+            <!-- Your main view, should have "view-main" class -->
+            <div class="view view-main">
+              <!-- Initial Page, "data-name" contains page name -->
+              <div data-name="home" class="page">
+      
+                <!-- Top Navbar -->
+                <div class="navbar">
+                  <div class="navbar-bg"></div>
+                  <div class="navbar-inner">
+                    <div class="title">Awesome App</div>
+                    <div class="right">
+                      <a href="/profile/" class="link tooltip-init profile-link" data-tooltip="Profile settings">
+                        <i class="profile-icon"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+      
+                <!-- Bottom Toolbar -->
+                <div class="toolbar toolbar-bottom">
+                  <div class="toolbar-inner">
+                    <!-- Toolbar links -->
+                    <a href="#" class="link">Link 1</a>
+                    <a href="#" class="link">Link 2</a>
+                  </div>
+                </div>
+      
+                <!-- Scrollable page content -->
+                <div class="page-content">
+                  <p>Page content goes here</p>
+                  <!-- Link to another page -->
+                  <a href="/about/">About app</a>
+                </div>
+              </div>
             </div>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/framework7.bundle.min.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>
