@@ -19,6 +19,7 @@
 
 
 var $$ = Dom7;
+var kalenderJSON = [];
 
 var app = new Framework7({
   // App root element
@@ -59,3 +60,35 @@ $$('.convert-form-to-data').on('click', function(){
   // Da die Einbindung von Shiboleth nicht vorgesehen ist wird die Anmeldung immer akzeotiert.
   app.views.get('.view-main').router.navigate('/Calendar/');
 });
+
+$$(document).on('page:init', '.page[data-name="Calendar"]', fillDataPage);
+
+function fillDataPage(){
+  console.log("TEST");
+  loadCalendar();
+}
+
+
+function loadCalendar(){
+  if(window.plugins.calendar != null){
+    var container = document.getElementById("acc-content3")
+    container.innerHTML = ("<p>Lade ger&auml;teinterne Kalender...</p>")
+    var liste = document.createElement("ul");
+    window.plugins.calendar.listCalendars(function(message){
+      for(var i in message){
+          var element = document.createElement("li");
+          element.innerHTML = getCalendarElement(message[i].id, message[i].name);
+          liste.appendChild(element);
+      }
+      //container.innerHTML = "";
+      container.appendChild(liste);   
+    },function(message){
+      container.innerHTML = "Kalender konnten nicht ausgelesen werden";
+    });
+  }else{
+      alert("Diese native Funktion kann nur in einer installierten Anwendung ausgeführt werden");
+  }
+}
+
+
+

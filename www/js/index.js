@@ -19,6 +19,7 @@
 
 
 var $$ = Dom7;
+var kalenderJSON = [];
 
 var app = new Framework7({
   // App root element
@@ -45,17 +46,77 @@ var app = new Framework7({
     swipe: 'left',
   },
 });
-  
+
+/*  Element-Definition
+    
+    Main View
+    Navigation Bar Tooltop mit Hinweistext
+
+*/
 var mainView = app.views.create('.view-main');
-// navbar tooltip
 var navbarTooltip = app.tooltip.create({
   targetEl: '.navbar-tooltip',
   text: 'Verwenden Sie Ihre<br>CAS-Zugangsdaten<br>um die Funktionen der<br>App zu verwenden'
 });
 
+/*  Page INITS
+    
+    INIT für Datenseite
+
+*/
+$$(document).on('page:init', '.page[data-name="Calendar"]', fillDataPage);
+
+
+/*
+
+Eventlistener für den Button auf der Loginseite
+
+*/
 $$('.convert-form-to-data').on('click', function(){
   var formData = app.form.convertToData('#Anmelde_Form');
   console.log(formData);
   // Da die Einbindung von Shiboleth nicht vorgesehen ist wird die Anmeldung immer akzeotiert.
   app.views.get('.view-main').router.navigate('/Calendar/');
 });
+
+
+/*
+
+Eventlistener für Zurückbutton (z.B. Android Geräte)
+
+*/
+document.addEventListener("backbutton", function(){
+  app.views.get('.view-main').router.back();
+}, false);
+
+
+
+
+function fillDataPage(){
+  // TODO Querladen der restlichen Daten aus einem JSON
+  loadCalendar();
+}
+
+function loadCalendar(){
+  if(window.plugins.calendar != null){
+    var container = document.getElementById("acc-content3")
+    container.innerHTML = ("<p>Lade ger&auml;teinterne Kalender...</p>")
+    var liste = document.createElement("ul");
+    window.plugins.calendar.listCalendars(function(message){
+      for(var i in message){
+          var element = document.createElement("li");
+          element.innerHTML = getCalendarElement(message[i].id, message[i].name);
+          liste.appendChild(element);
+      }
+      container.innerHTML = "";
+      container.appendChild(liste);   
+    },function(message){
+      container.innerHTML = "Kalender konnten nicht ausgelesen werden";
+    });
+  }else{
+      alert("Diese native Funktion kann nur in einer installierten Anwendung ausgeführt werden");
+  }
+}
+
+
+

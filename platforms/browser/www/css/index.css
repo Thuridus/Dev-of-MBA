@@ -33,7 +33,6 @@ body {
     padding:0px;
     /* Padding to avoid the "unsafe" areas behind notches in the screen */
     padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-right, 0px);
-    text-transform:uppercase;
     width:100%;
 }
 
@@ -104,4 +103,19 @@ h1 {
 .blink {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
+}
+
+#login-icon{
+    width: 80%;
+    margin: 35px auto 15px;
+    padding-right: 25px;
+}
+#login-icon img{
+    width: 100%;
+}
+.custom-button{
+    background-color: rgb(227,16,14) !important;
+}
+.page-content{
+    padding: 20px;
 }
