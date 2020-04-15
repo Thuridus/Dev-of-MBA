@@ -28,7 +28,7 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
@@ -40,66 +40,67 @@
     <body>
         <div id="app">
 
-            <!-- Your main view, should have "view-main" class -->
-            <div class="view view-main">
-              <!-- Initial Page, "data-name" contains page name -->
-              <div data-name="login" class="page">
-      
-                <!-- Top Navbar -->
-                <div class="navbar">
-                  <div class="navbar-bg"></div>
-                  <div class="navbar-inner">
-                    <div class="title">CAS Planner</div>
-                    <div class="right"> 
-                      <a href="#" class="link navbar-tooltip">
-                        <i class="icon f7-icons">info</i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-      
-                <!-- Scrollable page content -->
-                <div class="page-content">
-                  <!-- Logo im oberen Bereich des Fensters -->
-                  <div id="login-icon">
-                    <img src="./img/DHBW_CAS_LOGO.svg">
-                  </div>
-                  <!-- Formular zum Anmelden -->
-                  <form class="list" id="Anmelde_Form">
-                    <ul>
-                      <!-- Feld für die Mailadresse-->
-                      <li>
-                        <div class="item-content item-input">
-                          <div class="item-inner">
-                            <div class="item-title item-label">CAS-Adresse</div>
-                            <div class="item-input-wrap">
-                              <input type="text" name="mail" placeholder="xxx@cas.dhbw.de">
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <!-- Feld für das Passwort -->
-                      <li>
-                        <div class="item-content item-input">
-                          <div class="item-inner">
-                            <div class="item-title item-label">Passwort</div>
-                            <div class="item-input-wrap">
-                              <input type="password" name="password" placeholder="Passwort">
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
-                  </form>
-                  <div>
-                    <a class="button custom-button button-fill convert-form-to-data" href="#">Anmelden</a>
+          <!-- Your main view, should have "view-main" class -->
+          <div class="view view-main">
+            <!-- Initial Page, "data-name" contains page name -->
+            <div data-name="login" class="page">
+    
+              <!-- Top Navbar -->
+              <div class="navbar">
+                <div class="navbar-bg"></div>
+                <div class="navbar-inner">
+                  <div class="title">CAS Planner</div>
+                  <div class="right"> 
+                    <a href="#" class="link navbar-tooltip">
+                      <i class="icon f7-icons">info</i>
+                    </a>
                   </div>
                 </div>
               </div>
+    
+              <!-- Scrollable page content -->
+              <div class="page-content">
+                <!-- Logo im oberen Bereich des Fensters -->
+                <div id="login-icon">
+                  <img src="./img/DHBW_CAS_LOGO.svg">
+                </div>
+                <!-- Formular zum Anmelden -->
+                <form class="list" id="Anmelde_Form">
+                  <ul>
+                    <!-- Feld für die Mailadresse-->
+                    <li>
+                      <div class="item-content item-input">
+                        <div class="item-inner">
+                          <div class="item-title item-label">CAS-Adresse</div>
+                          <div class="item-input-wrap">
+                            <input type="text" name="mail" placeholder="xxx@cas.dhbw.de">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <!-- Feld für das Passwort -->
+                    <li>
+                      <div class="item-content item-input">
+                        <div class="item-inner">
+                          <div class="item-title item-label">Passwort</div>
+                          <div class="item-input-wrap">
+                            <input type="password" name="password" placeholder="Passwort">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </form>
+                <div>
+                  <a class="button custom-button button-fill convert-form-to-data" href="#">Anmelden</a>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
-        <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/framework7.bundle.min.js"></script>
+        <script type="text/javascript" src="js/DataCalendar.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/util.js"></script>
     </body>

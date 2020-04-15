@@ -49,15 +49,24 @@ var app = new Framework7({
 
 /*  Element-Definition
     
+    Data Kalendar
     Main View
     Navigation Bar Tooltop mit Hinweistext
+    Toast no Calendar selected
 
 */
+var dataCalendar = new DataCalendar();
 var mainView = app.views.create('.view-main');
 var navbarTooltip = app.tooltip.create({
   targetEl: '.navbar-tooltip',
   text: 'Verwenden Sie Ihre<br>CAS-Zugangsdaten<br>um die Funktionen der<br>App zu verwenden'
 });
+var toastNoCalendar = app.toast.create({
+  text: 'Es wurde kein Kalender für den Abgleich ausgewählt.',
+  closeButton: true,
+});
+
+
 
 /*  Page INITS
     
@@ -78,6 +87,10 @@ $$('.convert-form-to-data').on('click', function(){
   // Da die Einbindung von Shiboleth nicht vorgesehen ist wird die Anmeldung immer akzeotiert.
   app.views.get('.view-main').router.navigate('/Calendar/');
 });
+toastNoCalendar.on("close", function(){
+  document.getElementById("dataPageContinue").setAttribute("data-warning", "true");
+})
+
 
 
 /*
@@ -118,5 +131,11 @@ function loadCalendar(){
   }
 }
 
-
+function loadCalendarData(element){
+  if(document.getElementById("dataPageContinue").getAttribute("data-warning") == "true"){
+    alert("open new site")
+  }else{
+    toastNoCalendar.open();
+  }
+}
 

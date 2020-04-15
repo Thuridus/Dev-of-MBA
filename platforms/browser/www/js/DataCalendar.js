@@ -1,4 +1,4 @@
-var customCalendar = function(){
+var DataCalendar = function(){
     this.kalenderJSON = [];
     var currentYear = new Date().getFullYear();
     // drei Jahre hinzufügen (Vorjahr, aktuelles Jahr und Folgejahr)
@@ -15,14 +15,6 @@ var customCalendar = function(){
         this.kalenderJSON.push(jahr);
     }
 }
-
-
-
-
-
-
-
-
 
 var jsonSteuertabelle = [
     {"monat": "Januar", "numberDays": "31"},
@@ -51,3 +43,7 @@ function jsonTag(){
 function jsonTermin(titel, ort){
     return {"number": "", "name": titel, "date": null, "ort": ort, "id": ""};
 }
+
+/***********************************************************************************************************************
+ * Methoden
+ ************************************************************************************************************************/

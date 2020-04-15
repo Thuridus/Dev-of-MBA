@@ -30,8 +30,8 @@ var app = new Framework7({
   id: 'www.famlovric.CAS_Planner',
   routes:[
     {   
-        path: '/calendar/',
-        url: 'calendar.html',
+        path: '/datapage/',
+        url: 'datapage.html',
     },{
         path: '/units/',
         url: 'units.html',
@@ -46,28 +46,69 @@ var app = new Framework7({
     swipe: 'left',
   },
 });
-  
+
+/*  Element-Definition
+    
+    Data Kalendar
+    Main View
+    Navigation Bar Tooltop mit Hinweistext
+    Toast no Calendar selected
+
+*/
+var dataCalendar = new DataCalendar();
 var mainView = app.views.create('.view-main');
-// navbar tooltip
 var navbarTooltip = app.tooltip.create({
   targetEl: '.navbar-tooltip',
   text: 'Verwenden Sie Ihre<br>CAS-Zugangsdaten<br>um die Funktionen der<br>App zu verwenden'
 });
+var toastNoCalendar = app.toast.create({
+  text: 'Es wurde kein Kalender f&uuml;r den Abgleich ausgew&auml;hlt.',
+  closeButton: true,
+});
 
+
+
+/*  Page INITS
+    
+    INIT für Datenseite
+
+*/
+$$(document).on('page:init', '.page[data-name="datapage"]', fillDataPage);
+
+
+/*
+
+Eventlistener für den Button auf der Loginseite
+
+*/
 $$('.convert-form-to-data').on('click', function(){
   var formData = app.form.convertToData('#Anmelde_Form');
   console.log(formData);
   // Da die Einbindung von Shiboleth nicht vorgesehen ist wird die Anmeldung immer akzeotiert.
-  app.views.get('.view-main').router.navigate('/Calendar/');
+  app.views.get('.view-main').router.navigate('/datapage/');
+});
+toastNoCalendar.on("close", function(){
+  app.views.get('.view-main').router.navigate('/units/');
 });
 
-$$(document).on('page:init', '.page[data-name="Calendar"]', fillDataPage);
+
+
+/*
+
+Eventlistener für Zurückbutton (z.B. Android Geräte)
+
+*/
+document.addEventListener("backbutton", function(){
+  app.views.get('.view-main').router.back();
+}, false);
+
+
+
 
 function fillDataPage(){
-  console.log("TEST");
+  // TODO Querladen der restlichen Daten aus einem JSON
   loadCalendar();
 }
-
 
 function loadCalendar(){
   if(window.plugins.calendar != null){
@@ -80,15 +121,29 @@ function loadCalendar(){
           element.innerHTML = getCalendarElement(message[i].id, message[i].name);
           liste.appendChild(element);
       }
-      //container.innerHTML = "";
+      container.innerHTML = "";
       container.appendChild(liste);   
     },function(message){
       container.innerHTML = "Kalender konnten nicht ausgelesen werden";
     });
   }else{
-      alert("Diese native Funktion kann nur in einer installierten Anwendung ausgeführt werden");
+    alert("Diese native Funktion kann nur in einer installierten Anwendung ausgeführt werden");
   }
 }
 
+function loadCalendarData(){
+  var minOneCalendarChacked = false;
+  var checkboxes = document.getElementsByName("calendarCheckbox");
+  for(var i = 0; i < checkboxes.length; i++){
+    if(checkboxes[i].checked){
+      minOneCalendarChacked = true;
+    }
+  }
 
+  if(!minOneCalendarChacked){
+    toastNoCalendar.open();
+  }else{
+    app.views.get('.view-main').router.navigate('/units/');
+  }
+}
 
