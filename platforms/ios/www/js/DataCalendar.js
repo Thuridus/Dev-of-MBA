@@ -1,5 +1,6 @@
 var DataCalendar = function(){
     this.kalenderJSON = [];
+    this.terminarray = [];
     var currentYear = new Date().getFullYear();
     // drei Jahre hinzufügen (Vorjahr, aktuelles Jahr und Folgejahr)
     for (h = -1; h <= 1; h++ ){
@@ -40,10 +41,24 @@ function jsonMonat(monat){
 function jsonTag(){
     return {"termine": []};
 }
-function jsonTermin(titel, ort){
-    return {"number": "", "name": titel, "date": null, "ort": ort, "id": ""};
-}
+
+
+
+
 
 /***********************************************************************************************************************
  * Methoden
  ************************************************************************************************************************/
+
+
+
+DataCalendar.prototype.addElementToFikitvCalendar = function(date, element){
+    var dateElements = date.split(".");
+    var tag = getReturnElement(this.kalenderJSON, dateElements[2]).monate[parseInt(dateElements[1])-1].tage[parseInt(dateElements[0])];
+    tag.termine.push(element);
+
+
+    console.log(this.kalenderJSON);
+ 
+}
+

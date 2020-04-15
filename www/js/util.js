@@ -8,3 +8,14 @@ function getCalendarElement(id, name){
         </div>
     </label>`;
 }
+
+function getReturnElement(object, value){
+    for(counter in object){
+        if(object[counter].id == value){
+            return object[counter];
+        }
+    }
+    return null;
+}
+
+
