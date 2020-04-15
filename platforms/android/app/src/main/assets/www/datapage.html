@@ -1,17 +1,21 @@
 <!-- Calendar Page, "data-name" contains page name -->
-<div data-name="Calendar" class="page">
+<div data-name="datapage" class="page">
       
     <!-- Top Navbar -->
     <div class="navbar">
       <div class="navbar-bg"></div>
       <div class="navbar-inner">
         <div class="title">CAS Planner</div>
-        <div class="right"> 
-          <a href="#" class="link navbar-tooltip">
-            <i class="icon f7-icons">info</i>
-          </a>
-        </div>
       </div>
+    </div>
+
+    <!-- Bottom Toolbar -->
+    <div class="toolbar toolbar-bottom">
+        <div class="toolbar-inner">
+            <!-- Toolbar links -->
+            <a href="#" class="link"></a>
+            <a href="javascript:loadCalendarData()" class="link">WEITER</a>
+        </div>
     </div>
 
     <!-- Scrollable page content -->
@@ -110,9 +114,7 @@
                 </a>
                 <div class="accordion-item-content">
                     <div class="block">
-                        <p id="acc-content3">
-                            Inhalt
-                        </p>
+                        <p id="acc-content3"></p>
                     </div>
                 </div>
             </li>
