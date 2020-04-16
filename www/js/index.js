@@ -19,7 +19,7 @@
 
 
 var $$ = Dom7;
-var kalenderJSON = [];
+var dataCalendar;
 
 var app = new Framework7({
   // App root element
@@ -131,19 +131,31 @@ function loadCalendar(){
   }
 }
 
-function loadCalendarData(){
+async function dataPageContinue(){
   var minOneCalendarChacked = false;
   var checkboxes = document.getElementsByName("calendarCheckbox");
+  var preloader = app.dialog.preloader("Lade Kalenderdaten")
   for(var i = 0; i < checkboxes.length; i++){
     if(checkboxes[i].checked){
       minOneCalendarChacked = true;
+      await getPrivateCalendarData(checkboxes[i].value);
     }
   }
-
+  preloader.close();
   if(!minOneCalendarChacked){
     toastNoCalendar.open();
   }else{
     app.views.get('.view-main').router.navigate('/units/');
   }
+}
+
+async function getPrivateCalendarData(calendarID){
+  console.log("Load calendar data from: " + calendarID);
+  
+
+
+
+
+  console.log("Finished loading calendar data from: " + calendarID);
 }
 

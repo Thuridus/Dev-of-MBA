@@ -18,4 +18,7 @@ function getReturnElement(object, value){
     return null;
 }
 
-
+function insertPrivateCalendarData(){
+    var calendarCheckbox = document.getElementsByName("calendarCheckbox");
+    
+}

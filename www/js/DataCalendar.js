@@ -49,12 +49,10 @@ function jsonTag(){
 /***********************************************************************************************************************
  * Methoden
  ************************************************************************************************************************/
-
-
-
 DataCalendar.prototype.addElementToFikitvCalendar = function(date, element){
     var dateElements = date.split(".");
     var tag = getReturnElement(this.kalenderJSON, dateElements[2]).monate[parseInt(dateElements[1])-1].tage[parseInt(dateElements[0])-1];
     tag.termine.push(element);
 }
+
 
