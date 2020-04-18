@@ -19,7 +19,8 @@
 
 
 var $$ = Dom7;
-var kalenderJSON = [];
+var dataCalendar;
+var preloader;
 
 var app = new Framework7({
   // App root element
@@ -30,8 +31,8 @@ var app = new Framework7({
   id: 'www.famlovric.CAS_Planner',
   routes:[
     {   
-        path: '/calendar/',
-        url: 'calendar.html',
+        path: '/datapage/',
+        url: 'datapage.html',
     },{
         path: '/units/',
         url: 'units.html',
@@ -62,7 +63,7 @@ var navbarTooltip = app.tooltip.create({
   text: 'Verwenden Sie Ihre<br>CAS-Zugangsdaten<br>um die Funktionen der<br>App zu verwenden'
 });
 var toastNoCalendar = app.toast.create({
-  text: 'Es wurde kein Kalender für den Abgleich ausgewählt.',
+  text: 'Es wurde kein Kalender f&uuml;r den Abgleich ausgew&auml;hlt.',
   closeButton: true,
 });
 
@@ -73,7 +74,7 @@ var toastNoCalendar = app.toast.create({
     INIT für Datenseite
 
 */
-$$(document).on('page:init', '.page[data-name="Calendar"]', fillDataPage);
+$$(document).on('page:init', '.page[data-name="datapage"]', fillDataPage);
 
 
 /*
@@ -85,11 +86,11 @@ $$('.convert-form-to-data').on('click', function(){
   var formData = app.form.convertToData('#Anmelde_Form');
   console.log(formData);
   // Da die Einbindung von Shiboleth nicht vorgesehen ist wird die Anmeldung immer akzeotiert.
-  app.views.get('.view-main').router.navigate('/Calendar/');
+  app.views.get('.view-main').router.navigate('/datapage/');
 });
 toastNoCalendar.on("close", function(){
-  document.getElementById("dataPageContinue").setAttribute("data-warning", "true");
-})
+  app.views.get('.view-main').router.navigate('/units/');
+});
 
 
 
@@ -99,7 +100,9 @@ Eventlistener für Zurückbutton (z.B. Android Geräte)
 
 */
 document.addEventListener("backbutton", function(){
+  preloader.close();
   app.views.get('.view-main').router.back();
+  //window.setTimeout(() => window.stop(), 2000);
 }, false);
 
 
@@ -111,9 +114,9 @@ function fillDataPage(){
 }
 
 function loadCalendar(){
-  if(window.plugins.calendar != null){
-    var container = document.getElementById("acc-content3")
-    container.innerHTML = ("<p>Lade ger&auml;teinterne Kalender...</p>")
+  var container = document.getElementById("acc-content3");
+  if(window.plugins.calendar != null && (device.platform == "iOS" || device.platform == "Android")){
+    container.innerHTML = ("<p>Lade ger&auml;teinterne Kalender...</p>");
     var liste = document.createElement("ul");
     window.plugins.calendar.listCalendars(function(message){
       for(var i in message){
@@ -124,18 +127,83 @@ function loadCalendar(){
       container.innerHTML = "";
       container.appendChild(liste);   
     },function(message){
-      container.innerHTML = "Kalender konnten nicht ausgelesen werden";
+      container.innerHTML = "Interne Kalender konnten nicht ermittelt werden";
     });
-  }else{
-      alert("Diese native Funktion kann nur in einer installierten Anwendung ausgeführt werden");
+  }else{i
+    container.innerHTML = "Diese native Funktion kann nur auf Android und iOS Endgeräten ausgeführt werden";
   }
 }
 
-function loadCalendarData(element){
-  if(document.getElementById("dataPageContinue").getAttribute("data-warning") == "true"){
-    alert("open new site")
-  }else{
+function dataPageContinue(){
+  var checkboxes = document.getElementsByName("calendarCheckbox");
+  preloader = app.dialog.preloader("Lade Kalenderdaten")
+  var calendarIDs = [];
+  for(var i = 0; i < checkboxes.length; i++){
+    if(checkboxes[i].checked){
+      calendarIDs.push(checkboxes[i].value);
+    }
+  }
+  // Wenn Kalender ausgewählt wurden sollen diese ausgelesen werden. Sonst wird nur des Toast geöffnet
+  if(calendarIDs.length == 0){
+    preloader.close();
     toastNoCalendar.open();
+  }else{
+    // Unterscheidung der Systme
+    switch(device.platform){
+      case "iOS":
+        getPrivateCalendarDataApple(null, calendarIDs);
+        break;
+      case "Android":
+        getPrivateCalendarDataAndroid(null, calendarIDs);
+        break;
+      default: 
+        alert(`Cordova Kalender Plugin unterstüzt die Plattform ${device.platform} nicht`);
+    }
   }
 }
 
+function getPrivateCalendarDataApple(message, calendarID){
+  if(message != null){
+    handleMessageObject(message);
+  }
+  if(calendarID.length > 0){
+    window.plugins.calendar.findAllEventsInNamedCalendar(calendarID.shift(), (message) => getPrivateCalendarDataApple(message, calendarID), (message) => console.log("Error"));
+  }else{
+    preloader.close();
+    app.views.get('.view-main').router.navigate('/units/');
+  }
+}
+
+function getPrivateCalendarDataAndroid(message, calendarID){
+  if(message != null){
+    handleMessageObject(message);
+  }
+  if(calendarID.length > 0){
+    window.plugins.calendar.findAllEventsInNamedCalendar(calendarID.shift(), (message) => getPrivateCalendarDataAndroid(message, calendarID), (message) => console.log("Error"));
+  }else{
+    preloader.close();
+    app.views.get('.view-main').router.navigate('/units/');
+  }
+}
+
+function handleMessageObject(message){
+  for (i in message){
+    dataCalendar.writeEventsToFiktivCalendar(dayCountOnEvent(message[i]), message[i]);
+  }
+}
+
+function dayCountOnEvent(event){
+  var startDate = new Date(getClearDate(event.startDate));
+  var endDate = new Date(getClearDate(event.endDate));
+  var arrayDates = [];
+  // Vergleich von Start und Enddatum
+  if((endDate - startDate) > 0){
+    while((endDate - startDate) > 0){
+      startDate.setDate(startDate.getDate() + 1);
+    }
+  }else{
+    
+  }
+  console.log(startDate);
+  return arrayDates;
+}

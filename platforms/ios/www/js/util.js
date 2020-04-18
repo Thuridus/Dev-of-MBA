@@ -9,7 +9,7 @@ function getCalendarElement(id, name){
     </label>`;
 }
 
-function getReturnElement(object, value){
+function returnElement(object, value){
     for(counter in object){
         if(object[counter].id == value){
             return object[counter];
@@ -18,7 +18,18 @@ function getReturnElement(object, value){
     return null;
 }
 
-function insertPrivateCalendarData(){
-    var calendarCheckbox = document.getElementsByName("calendarCheckbox");
-    
+function getClearDate(dateString){
+    var dateTime = dateString.split(" ");
+    return dateTime[0];
+}
+
+function timeMachine(date, year, month, day){
+    date.setFullYear(date.getFullYear() + year);
+    date.setMonth(date.getMonth() + month);
+    date.setDate(date.getDate() + day);
+    return new Date(date);
+}
+
+function jsonEvent(){
+    return {"title": "", "start": "", "end": "", "location": "", "days": []};
 }

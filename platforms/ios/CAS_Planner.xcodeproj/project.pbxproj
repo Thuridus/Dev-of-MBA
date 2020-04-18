@@ -17,6 +17,7 @@
 		705534DE97A34AA09B407B35 /* Calendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F27F3E53734293A40F4E3C /* Calendar.m */; };
 		999121A3B5CD4192821C6C12 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9616D893383453B983B2998 /* EventKit.framework */; };
 		F8A9DAC3FE4E4E9C80FBD17C /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 383F8F3A6CCE437DB13FEE34 /* EventKitUI.framework */; };
+		ABA7345F3B854447A689AA89 /* CDVDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B024A2D35343A6BB2135AC /* CDVDevice.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,8 @@
 		8CC8A1836EE646DCB2B0D73A /* Calendar.h */ = {isa = PBXFileReference; name = "Calendar.h"; path = "cordova-plugin-calendar/Calendar.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		A9616D893383453B983B2998 /* EventKit.framework */ = {isa = PBXFileReference; name = "EventKit.framework"; path = "System/Library/Frameworks/EventKit.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 		383F8F3A6CCE437DB13FEE34 /* EventKitUI.framework */ = {isa = PBXFileReference; name = "EventKitUI.framework"; path = "System/Library/Frameworks/EventKitUI.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		57B024A2D35343A6BB2135AC /* CDVDevice.m */ = {isa = PBXFileReference; name = "CDVDevice.m"; path = "cordova-plugin-device/CDVDevice.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		000416AE15E148B3B5CD6FF1 /* CDVDevice.h */ = {isa = PBXFileReference; name = "CDVDevice.h"; path = "cordova-plugin-device/CDVDevice.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +181,8 @@
 			children = (
 				38F27F3E53734293A40F4E3C /* Calendar.m */,
 				8CC8A1836EE646DCB2B0D73A /* Calendar.h */,
+				57B024A2D35343A6BB2135AC /* CDVDevice.m */,
+				000416AE15E148B3B5CD6FF1 /* CDVDevice.h */,
 			);
 			name = Plugins;
 			path = "CAS_Planner/Plugins";
@@ -303,6 +308,7 @@
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
 				705534DE97A34AA09B407B35 /* Calendar.m in Sources */,
+				ABA7345F3B854447A689AA89 /* CDVDevice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

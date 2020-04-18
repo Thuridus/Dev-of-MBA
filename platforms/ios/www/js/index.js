@@ -20,6 +20,7 @@
 
 var $$ = Dom7;
 var dataCalendar;
+var preloader;
 
 var app = new Framework7({
   // App root element
@@ -30,11 +31,17 @@ var app = new Framework7({
   id: 'www.famlovric.CAS_Planner',
   routes:[
     {   
-        path: '/datapage/',
-        url: 'datapage.html',
+      path: '/login/',
+      url: 'index.html',
+      keepAlive: true,
+    },{   
+      path: '/datapage/',
+      url: 'datapage.html',
+      keepAlive: true,
     },{
-        path: '/units/',
-        url: 'units.html',
+      path: '/units/',
+      url: 'units.html',
+      keepAlive: true,
     }
   ],
   touch: {
@@ -66,44 +73,34 @@ var toastNoCalendar = app.toast.create({
   closeButton: true,
 });
 
+// Call first Page init()
+initHomepage();
 
 
-/*  Page INITS
-    
-    INIT für Datenseite
-
-*/
 $$(document).on('page:init', '.page[data-name="datapage"]', fillDataPage);
+$$(document).on('page:init', '.page[data-name="login"]', initHomepage);
 
-
-/*
-
-Eventlistener für den Button auf der Loginseite
-
-*/
-$$('.convert-form-to-data').on('click', function(){
-  var formData = app.form.convertToData('#Anmelde_Form');
-  console.log(formData);
-  // Da die Einbindung von Shiboleth nicht vorgesehen ist wird die Anmeldung immer akzeotiert.
-  app.views.get('.view-main').router.navigate('/datapage/');
-});
 toastNoCalendar.on("close", function(){
   app.views.get('.view-main').router.navigate('/units/');
 });
 
-
-
-/*
-
-Eventlistener für Zurückbutton (z.B. Android Geräte)
-
-*/
 document.addEventListener("backbutton", function(){
+  if(!preloader.closed){
+    preloader.close();
+  }
   app.views.get('.view-main').router.back();
+  //window.setTimeout(() => window.stop(), 2000);
 }, false);
 
 
-
+function initHomepage(){
+  $$('.convert-form-to-data').on('click', function(){
+    var formData = app.form.convertToData('#Anmelde_Form');
+    console.log(formData);
+    // Da die Einbindung von Shiboleth nicht vorgesehen ist wird die Anmeldung immer akzeotiert.
+    app.views.get('.view-main').router.navigate('/datapage/');
+  });
+}
 
 function fillDataPage(){
   // TODO Querladen der restlichen Daten aus einem JSON
@@ -111,9 +108,9 @@ function fillDataPage(){
 }
 
 function loadCalendar(){
-  if(window.plugins.calendar != null){
-    var container = document.getElementById("acc-content3")
-    container.innerHTML = ("<p>Lade ger&auml;teinterne Kalender...</p>")
+  var container = document.getElementById("acc-content3");
+  if(window.plugins.calendar != null && (device.platform == "iOS" || device.platform == "Android")){
+    container.innerHTML = ("<p>Lade ger&auml;teinterne Kalender...</p>");
     var liste = document.createElement("ul");
     window.plugins.calendar.listCalendars(function(message){
       for(var i in message){
@@ -124,38 +121,91 @@ function loadCalendar(){
       container.innerHTML = "";
       container.appendChild(liste);   
     },function(message){
-      container.innerHTML = "Kalender konnten nicht ausgelesen werden";
+      container.innerHTML = "Interne Kalender konnten nicht ermittelt werden";
     });
-  }else{
-    alert("Diese native Funktion kann nur in einer installierten Anwendung ausgeführt werden");
+  }else{i
+    container.innerHTML = "Diese native Funktion kann nur auf Android und iOS Endgeräten ausgeführt werden";
   }
 }
 
-async function dataPageContinue(){
-  var minOneCalendarChacked = false;
+function dataPageContinue(){
   var checkboxes = document.getElementsByName("calendarCheckbox");
-  var preloader = app.dialog.preloader("Lade Kalenderdaten")
+  preloader = app.dialog.preloader("Lade Kalenderdaten")
+  var calendarIDs = [];
   for(var i = 0; i < checkboxes.length; i++){
     if(checkboxes[i].checked){
-      minOneCalendarChacked = true;
-      await getPrivateCalendarData(checkboxes[i].value);
+      calendarIDs.push(checkboxes[i].value);
     }
   }
-  preloader.close();
-  if(!minOneCalendarChacked){
+  // Wenn Kalender ausgewählt wurden sollen diese ausgelesen werden. Sonst wird nur des Toast geöffnet
+  if(calendarIDs.length == 0){
+    preloader.close();
     toastNoCalendar.open();
   }else{
+    // Unterscheidung der Systme
+    switch(device.platform){
+      case "iOS":
+        getPrivateCalendarDataApple(null, calendarIDs);
+        break;
+      case "Android":
+        getPrivateCalendarDataAndroid(calendarIDs);
+        break;
+      default: 
+        alert(`Cordova Kalender Plugin unterstüzt die Plattform ${device.platform} nicht`);
+    }
+  }
+}
+
+function getPrivateCalendarDataApple(message, calendarID){
+  if(message != null){
+    handleMessageObjectApple(message);
+  }
+  if(calendarID.length > 0){
+    window.plugins.calendar.findAllEventsInNamedCalendar(calendarID.shift(), (message) => getPrivateCalendarDataApple(message, calendarID), (message) => console.error("Error"));
+  }else{
+    preloader.close();
     app.views.get('.view-main').router.navigate('/units/');
   }
 }
 
-async function getPrivateCalendarData(calendarID){
-  console.log("Load calendar data from: " + calendarID);
-  
-
-
-
-
-  console.log("Finished loading calendar data from: " + calendarID);
+function getPrivateCalendarDataAndroid(calendarIDs){
+  var startDate = timeMachine(new Date(),-1,0,0);
+  var endDate = timeMachine(new Date(),1,0,0);
+  window.plugins.calendar.listEventsInRange(startDate, endDate, (message) => handleMessageObjectAndroid(message, calendarIDs), (message) => console.error("Error:" + message))
 }
 
+function handleMessageObjectApple(message){
+  for (i in message){
+    var event = new jsonEvent();
+    event.title = message[i].title;
+    event.start = new Date(message[i].startDate.replace(/-/g, "/"));
+    event.end = new Date(message[i].endDate.replace(/-/g, "/"));
+    event.location = message[i].location;
+    dataCalendar.addElementToFikitvCalendar(dayCountOnEvent(event));
+  }
+}
+
+function handleMessageObjectAndroid(message, calendarIDs){
+  for(i in message){
+    if(calendarIDs.includes(message[i].calendar_id)){
+      var event = new jsonEvent();
+      event.title = message[i].title;
+      event.start = new Date(message[i].dtstart);
+      event.end = new Date(message[i].dtend);
+      event.location = message[i].eventLocation;
+      dataCalendar.addElementToFikitvCalendar(dayCountOnEvent(event));
+    }
+  }
+  if(!preloader.closed) preloader.close();
+  app.views.get('.view-main').router.navigate('/units/');
+}
+
+function dayCountOnEvent(event){
+  var startDate = new Date(event.start.getFullYear(), event.start.getMonth(), event.start.getDate());
+  var endDate = new Date(event.end.getFullYear(), event.end.getMonth(), event.end.getDate());
+  do{
+    event.days.push(new Date(startDate));
+    startDate.setDate(startDate.getDate() + 1);
+  }while((endDate - startDate) >= 0);
+  return event;
+}

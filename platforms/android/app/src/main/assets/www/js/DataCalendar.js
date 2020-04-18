@@ -7,8 +7,8 @@ var DataCalendar = function(){
         var jahr = new jsonYahr(currentYear + h);
         for(i = 0; i < jsonSteuertabelle.length; i++){
             var monat = new jsonMonat(jsonSteuertabelle[i].monat);
-            for (j = 0; j < jsonSteuertabelle[i].numberDays; j++){
-                var tag = jsonTag();
+            for (j = 1; j <= jsonSteuertabelle[i].numberDays; j++){
+                var tag = jsonTag(j);
                 monat.tage.push(tag);
             }
             jahr.monate.push(monat);
@@ -20,7 +20,7 @@ var DataCalendar = function(){
 var jsonSteuertabelle = [
     {"monat": "Januar", "numberDays": "31"},
     {"monat": "Februar", "numberDays": "29"},
-    {"monat": "März", "numberDays": "31"},
+    {"monat": "M&aumlrz", "numberDays": "31"},
     {"monat": "April", "numberDays": "30"},
     {"monat": "Mai", "numberDays": "31"},
     {"monat": "Juni", "numberDays": "30"},
@@ -38,23 +38,18 @@ function jsonYahr(jahr){
 function jsonMonat(monat){
     return {"id":monat, "tage": []}; 
 }
-function jsonTag(){
-    return {"termine": []};
+function jsonTag(tag){
+    return {"id": tag,"termine": []};
 }
-
-
-
-
 
 /***********************************************************************************************************************
  * Methoden
  ************************************************************************************************************************/
-
-
-
-DataCalendar.prototype.addElementToFikitvCalendar = function(date, element){
-    var dateElements = date.split(".");
-    var tag = getReturnElement(this.kalenderJSON, dateElements[2]).monate[parseInt(dateElements[1])-1].tage[parseInt(dateElements[0])-1];
-    tag.termine.push(element);
+DataCalendar.prototype.addElementToFikitvCalendar = function(event){
+    for(i in event.days){
+        var date = new Date(event.days[i]);
+        var tag = returnElement(this.kalenderJSON, date.getFullYear()).monate[date.getMonth()].tage[date.getDate() -1];
+        tag.termine.push(event);
+    }
 }
 

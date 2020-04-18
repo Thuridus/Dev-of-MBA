@@ -12,6 +12,9 @@
     },
     "cordova-plugin-calendar": {
       "PACKAGE_NAME": "www.famlovric.de"
+    },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "www.famlovric.de"
     }
   },
   "dependent_plugins": {}
