@@ -77,8 +77,10 @@ var toastNoCalendar = app.toast.create({
 initHomepage();
 
 
-$$(document).on('page:init', '.page[data-name="datapage"]', fillDataPage);
+$$(document).on('page:init', '.page[data-name="datapage"]', initDatapage);
 $$(document).on('page:init', '.page[data-name="login"]', initHomepage);
+$$(document).on('page:init', '.page[data-name="units"]', initUnitpage);
+
 
 toastNoCalendar.on("close", function(){
   app.views.get('.view-main').router.navigate('/units/');
@@ -102,12 +104,12 @@ function initHomepage(){
   });
 }
 
-function fillDataPage(){
+function initDatapage(){
   // TODO Querladen der restlichen Daten aus einem JSON
-  loadCalendar();
+  listCalendars();
 }
 
-function loadCalendar(){
+function listCalendars(){
   var container = document.getElementById("acc-content3");
   if(window.plugins.calendar != null && (device.platform == "iOS" || device.platform == "Android")){
     container.innerHTML = ("<p>Lade ger&auml;teinterne Kalender...</p>");
@@ -156,6 +158,11 @@ function dataPageContinue(){
   }
 }
 
+/***********************************************************************************************************************
+           Calendar Functions
+ ************************************************************************************************************************/ 
+//#region
+ 
 function getPrivateCalendarDataApple(message, calendarID){
   if(message != null){
     handleMessageObjectApple(message);
@@ -209,3 +216,55 @@ function dayCountOnEvent(event){
   }while((endDate - startDate) >= 0);
   return event;
 }
+//#endregion
+
+/***********************************************************************************************************************
+           Dynamic Unit Page
+ ************************************************************************************************************************/
+//#region 
+
+function initUnitpage(){
+// Schleife über alle Vorlesungseinheiten im JSON-Array
+  for(count in dualisOutput){
+// Anzahl der Unterelemente prüfen
+    if(dualisOutput[count].units.length > 1){
+      // Wenn mehr als ein SubElement vorhanden sind sollen diese jeweils angezeigt werden 
+      createUnitElementWithSubelements(dualisOutput[count], count);
+    }else{
+      // Wenn nur ein SubElement verfügbar ist soll kein Unterelement erstellt werden
+      createUnitElement(dualisOutput[count], count);
+    }
+  }
+  addCustomChangeListener();
+}
+
+function createUnitElementWithSubelements(vorlesung, elementNumber){
+  var unitNumber = vorlesung.number;
+// TopElement erstellen
+  var newUnit = document.createElement("li");
+  newUnit.appendChild(createTopLevelCheckbox(elementNumber, unitNumber, vorlesung.name));
+// Container für Unterelemente 
+  var subUnit = document.createElement("ul");
+// Schleife über alle Unterelemente
+  for(count in vorlesung.units){
+    subUnit.appendChild(createSubLevelCheckbox(elementNumber, count, unitNumber, vorlesung.units[count].unitname));
+  }
+//Container zum TopElement hinzufügen
+  newUnit.appendChild(subUnit);
+// TopElement zur Liste hinzufügen
+  var unitContainer = document.getElementById("listUnits");
+  unitContainer.appendChild(newUnit);
+}
+
+function createUnitElement(vorlesung, elementNumber){
+  var unitNumber = vorlesung.number;
+// TopElement erstellen
+  var newUnit = document.createElement("li");
+  newUnit.appendChild(createTopLevelCheckbox(elementNumber, unitNumber, vorlesung.name));
+// TopElement zur Liste hinzufügen
+  var unitContainer = document.getElementById("listUnits");
+  unitContainer.appendChild(newUnit);
+}
+
+
+//#endregion

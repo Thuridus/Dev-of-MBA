@@ -48,8 +48,11 @@ function jsonTag(tag){
 DataCalendar.prototype.addElementToFikitvCalendar = function(event){
     for(i in event.days){
         var date = new Date(event.days[i]);
-        var tag = returnElement(this.kalenderJSON, date.getFullYear()).monate[date.getMonth()].tage[date.getDate() -1];
-        tag.termine.push(event);
+        var tag = returnElement(this.kalenderJSON, date.getFullYear());
+        if(tag != null){
+            tag = tag.monate[date.getMonth()].tage[date.getDate() -1];
+            tag.termine.push(event);
+        }
     }
 }
 

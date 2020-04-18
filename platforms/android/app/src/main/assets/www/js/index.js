@@ -73,15 +73,13 @@ var toastNoCalendar = app.toast.create({
   closeButton: true,
 });
 
-// Call first init Page
+// Call first Page init()
 initHomepage();
 
 
-$$(document).on('page:init', '.page[data-name="datapage"]', fillDataPage);
+$$(document).on('page:init', '.page[data-name="datapage"]', initDatapage);
 $$(document).on('page:init', '.page[data-name="login"]', initHomepage);
-
-
-
+$$(document).on('page:init', '.page[data-name="units"]', initUnitpage);
 
 
 toastNoCalendar.on("close", function(){
@@ -106,12 +104,12 @@ function initHomepage(){
   });
 }
 
-function fillDataPage(){
+function initDatapage(){
   // TODO Querladen der restlichen Daten aus einem JSON
-  loadCalendar();
+  listCalendars();
 }
 
-function loadCalendar(){
+function listCalendars(){
   var container = document.getElementById("acc-content3");
   if(window.plugins.calendar != null && (device.platform == "iOS" || device.platform == "Android")){
     container.innerHTML = ("<p>Lade ger&auml;teinterne Kalender...</p>");
@@ -152,7 +150,7 @@ function dataPageContinue(){
         getPrivateCalendarDataApple(null, calendarIDs);
         break;
       case "Android":
-        getPrivateCalendarDataAndroid(null, calendarIDs);
+        getPrivateCalendarDataAndroid(calendarIDs);
         break;
       default: 
         alert(`Cordova Kalender Plugin unterstüzt die Plattform ${device.platform} nicht`);
@@ -160,10 +158,14 @@ function dataPageContinue(){
   }
 }
 
+/***********************************************************************************************************************
+           Calendar Functions
+ ************************************************************************************************************************/ 
+//#region
+ 
 function getPrivateCalendarDataApple(message, calendarID){
   if(message != null){
-    console.log(message);
-    //handleMessageObject(message);
+    handleMessageObjectApple(message);
   }
   if(calendarID.length > 0){
     window.plugins.calendar.findAllEventsInNamedCalendar(calendarID.shift(), (message) => getPrivateCalendarDataApple(message, calendarID), (message) => console.error("Error"));
@@ -173,7 +175,7 @@ function getPrivateCalendarDataApple(message, calendarID){
   }
 }
 
-function getPrivateCalendarDataAndroid(message, calendarIDs){
+function getPrivateCalendarDataAndroid(calendarIDs){
   var startDate = timeMachine(new Date(),-1,0,0);
   var endDate = timeMachine(new Date(),1,0,0);
   window.plugins.calendar.listEventsInRange(startDate, endDate, (message) => handleMessageObjectAndroid(message, calendarIDs), (message) => console.error("Error:" + message))
@@ -181,7 +183,12 @@ function getPrivateCalendarDataAndroid(message, calendarIDs){
 
 function handleMessageObjectApple(message){
   for (i in message){
-    dataCalendar.writeEventsToFiktivCalendar(dayCountOnEvent(message[i]), message[i]);
+    var event = new jsonEvent();
+    event.title = message[i].title;
+    event.start = new Date(message[i].startDate.replace(/-/g, "/"));
+    event.end = new Date(message[i].endDate.replace(/-/g, "/"));
+    event.location = message[i].location;
+    dataCalendar.addElementToFikitvCalendar(dayCountOnEvent(event));
   }
 }
 
@@ -209,3 +216,55 @@ function dayCountOnEvent(event){
   }while((endDate - startDate) >= 0);
   return event;
 }
+//#endregion
+
+/***********************************************************************************************************************
+           Dynamic Unit Page
+ ************************************************************************************************************************/
+//#region 
+
+function initUnitpage(){
+// Schleife über alle Vorlesungseinheiten im JSON-Array
+  for(count in dualisOutput){
+// Anzahl der Unterelemente prüfen
+    if(dualisOutput[count].units.length > 1){
+      // Wenn mehr als ein SubElement vorhanden sind sollen diese jeweils angezeigt werden 
+      createUnitElementWithSubelements(dualisOutput[count], count);
+    }else{
+      // Wenn nur ein SubElement verfügbar ist soll kein Unterelement erstellt werden
+      createUnitElement(dualisOutput[count], count);
+    }
+  }
+  addCustomChangeListener();
+}
+
+function createUnitElementWithSubelements(vorlesung, elementNumber){
+  var unitNumber = vorlesung.number;
+// TopElement erstellen
+  var newUnit = document.createElement("li");
+  newUnit.appendChild(createTopLevelCheckbox(elementNumber, unitNumber, vorlesung.name));
+// Container für Unterelemente 
+  var subUnit = document.createElement("ul");
+// Schleife über alle Unterelemente
+  for(count in vorlesung.units){
+    subUnit.appendChild(createSubLevelCheckbox(elementNumber, count, unitNumber, vorlesung.units[count].unitname));
+  }
+//Container zum TopElement hinzufügen
+  newUnit.appendChild(subUnit);
+// TopElement zur Liste hinzufügen
+  var unitContainer = document.getElementById("listUnits");
+  unitContainer.appendChild(newUnit);
+}
+
+function createUnitElement(vorlesung, elementNumber){
+  var unitNumber = vorlesung.number;
+// TopElement erstellen
+  var newUnit = document.createElement("li");
+  newUnit.appendChild(createTopLevelCheckbox(elementNumber, unitNumber, vorlesung.name));
+// TopElement zur Liste hinzufügen
+  var unitContainer = document.getElementById("listUnits");
+  unitContainer.appendChild(newUnit);
+}
+
+
+//#endregion
