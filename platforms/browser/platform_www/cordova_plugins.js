@@ -28,7 +28,8 @@ module.exports.metadata =
 {
     "cordova-plugin-whitelist": "1.3.4",
     "cordova-plugin-calendar": "5.1.5",
-    "cordova-plugin-device": "2.0.3"
+    "cordova-plugin-device": "2.0.3",
+    "cordova-plugin-browsersync-gen2": "1.1.7"
 }
 // BOTTOM OF METADATA
 });

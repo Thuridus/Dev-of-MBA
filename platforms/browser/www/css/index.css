@@ -119,3 +119,18 @@ h1 {
 .page-content{
     padding: 20px;
 }
+
+.toolbar-inner.toolbar-inner-big-Elements{
+    height: 100%;
+    padding: 0px 20px;
+}
+
+.toolbar-inner.toolbar-inner-big-Elements .f7-icons{
+    font-size: 40px;
+}
+
+.list .item-subtitle{
+    white-space: normal !important;
+}
+
+.size-22 { font-size: 22px !important}

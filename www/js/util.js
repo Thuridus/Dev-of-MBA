@@ -6,7 +6,6 @@ function returnElement(object, value){
     }
     return null;
 }
-
 function timeMachine(date, year, month, day){
     date.setFullYear(date.getFullYear() + year);
     date.setMonth(date.getMonth() + month);
@@ -14,13 +13,31 @@ function timeMachine(date, year, month, day){
     return new Date(date);
 }
 
+
 function jsonEvent(){
-    return {"title": "", "start": "", "end": "", "location": "", "days": []};
+    return {"title": "", "start": "", "end": "", "location": "", "state": true, "days": []};
 }
+function jsonUnit(topID, subID){
+    return {"topID":topID, "subID":subID, "number":"", "name":"", "state":false, "events":[]};
+}
+function jsonLectureEvent(date, destination){
+    return {"date": date, "destination":destination};
+}
+function jsonYahr(jahr){
+    return {"id":jahr, "monate": []}; 
+}
+function jsonMonat(monat){
+    return {"id":monat, "tage": []}; 
+}
+function jsonTag(tag){
+    return {"id": tag,"termine": []};
+}
+
 
 /***********************************************************************************************************************
            OBJECTS
  ************************************************************************************************************************/
+//#region 
 function getCalendarElement(id, name){
     return `
     <label class="item-checkbox item-content">
@@ -34,12 +51,14 @@ function getCalendarElement(id, name){
 function createTopLevelCheckbox(topIndex, number, name){
     var element = document.createElement("label");
     element.setAttribute("class", "item-checkbox item-content")
+    element.setAttribute("id", "checkbox_" + topIndex);
     element.innerHTML =  `
         <input type="checkbox" name="checkboxUnit_${topIndex}" data-id="unit" data-level="TOP" value="${topIndex}"/>
         <i class="icon icon-checkbox"></i>
         <div class="item-inner">
             <div class="item-title-row">
                 <div class="item-title">${number}</div>
+                <div class="item-after"></div>
             </div>    
             <div class="item-subtitle">${name}</div>
         </div>`;
@@ -48,26 +67,32 @@ function createTopLevelCheckbox(topIndex, number, name){
 function createSubLevelCheckbox(topIndex, subIndex, number, name){
     var element = document.createElement("li");
     element.innerHTML = `
-        <label class="item-checkbox item-content">
+        <label class="item-checkbox item-content" id="checkbox_${topIndex}_${subIndex}">
             <input type="checkbox" name="sub_checkboxUnit_${topIndex}" data-id="unit" data-level="SUB" value="${topIndex}_${subIndex}"/>
             <i class="icon icon-checkbox"></i>
             <div class="item-inner">
                 <div class="item-title-row">
                     <div class="item-title">${number}</div>
+                    <div class="item-after"></div>
                 </div>    
                 <div class="item-subtitle">${name}</div>
             </div>
         </label>`;
     return element;
 }
+//#endregion
 
+/***********************************************************************************************************************
+           Custom Listener
+ ************************************************************************************************************************/
 function addCustomChangeListener(){
     $$('[data-level="TOP"]').on('change', function (e){
-        console.log(e.target);
         if(e.target.checked){
             $$('[name="sub_' + e.target.name + '"]').prop('checked', true);
+            changeTopUnitEntry(e.target.value, true);
         }else{
             $$('[name="sub_' + e.target.name + '"]').prop('checked', false);
+            changeTopUnitEntry(e.target.value, false);
         }
     });
 
@@ -87,5 +112,7 @@ function addCustomChangeListener(){
         }else{
             $$('[name="' + topElementName + '"]').prop('indeterminate', false);
         }
+        //Hinzufügen bzw. Entfernen der Termine aus dem fiktiven Kalender
+        changeSubUnitEntry(e.target.value, e.target.checked);
     });
 }

@@ -133,6 +133,8 @@ function listCalendars(){
 function dataPageContinue(){
   var checkboxes = document.getElementsByName("calendarCheckbox");
   preloader = app.dialog.preloader("Lade Kalenderdaten")
+  // Für den Fall dass einmal zurückgegangen wurde muss der Kalender neu instanziert werden
+  dataCalendar = new DataCalendar();
   var calendarIDs = [];
   for(var i = 0; i < checkboxes.length; i++){
     if(checkboxes[i].checked){
@@ -188,7 +190,7 @@ function handleMessageObjectApple(message){
     event.start = new Date(message[i].startDate.replace(/-/g, "/"));
     event.end = new Date(message[i].endDate.replace(/-/g, "/"));
     event.location = message[i].location;
-    dataCalendar.addElementToFikitvCalendar(dayCountOnEvent(event));
+    dataCalendar.addTerminToFikitvCalendar(dayCountOnEvent(event));
   }
 }
 
@@ -200,7 +202,7 @@ function handleMessageObjectAndroid(message, calendarIDs){
       event.start = new Date(message[i].dtstart);
       event.end = new Date(message[i].dtend);
       event.location = message[i].eventLocation;
-      dataCalendar.addElementToFikitvCalendar(dayCountOnEvent(event));
+      dataCalendar.addTerminToFikitvCalendar(dayCountOnEvent(event));
     }
   }
   if(!preloader.closed) preloader.close();
@@ -224,9 +226,9 @@ function dayCountOnEvent(event){
 //#region 
 
 function initUnitpage(){
-// Schleife über alle Vorlesungseinheiten im JSON-Array
+  // Schleife über alle Vorlesungseinheiten im JSON-Array
   for(count in dualisOutput){
-// Anzahl der Unterelemente prüfen
+    // Anzahl der Unterelemente prüfen
     if(dualisOutput[count].units.length > 1){
       // Wenn mehr als ein SubElement vorhanden sind sollen diese jeweils angezeigt werden 
       createUnitElementWithSubelements(dualisOutput[count], count);
@@ -266,5 +268,50 @@ function createUnitElement(vorlesung, elementNumber){
   unitContainer.appendChild(newUnit);
 }
 
+
+//#endregion
+
+/***********************************************************************************************************************
+           Konfliktprüfung
+ ************************************************************************************************************************/
+//#region 
+function changeTopUnitEntry(value, state){
+  for(count in dataCalendar.terminArray){
+    if(dataCalendar.terminArray[count].topID == value){
+      dataCalendar.terminArray[count].state = state;
+    }
+  }
+  dataCalendar.checkForConflicts();
+}
+
+function changeSubUnitEntry(value, state){
+  var IDs = value.split("_");
+  for(count in dataCalendar.terminArray){
+    if(dataCalendar.terminArray[count].topID == IDs[0]){
+      if(dataCalendar.terminArray[count].subID == IDs[1]){
+        dataCalendar.terminArray[count].state = state;
+      }
+    }
+  }
+  dataCalendar.checkForConflicts();
+}
+
+function markUnitAsConflict(obj, state){
+  var element = document.getElementById("checkbox_" + obj.topID + "_" + obj.subID);  
+  if(element != null){
+    if(state){
+      element.getElementsByClassName("item-after")[0].innerHTML = '<i class="icon f7-icons color-red size-22">info_circle_fill</i>';
+    }else{
+      element.getElementsByClassName("item-after")[0].innerHTML = '';
+    }
+  }else{
+    var element = document.getElementById("checkbox_" + obj.topID);
+    if(state){
+      element.getElementsByClassName("item-after")[0].innerHTML = '<i class="icon f7-icons color-red size-22">info_circle_fill</i>';
+    }else{
+      element.getElementsByClassName("item-after")[0].innerHTML = '';
+    }
+  }
+}
 
 //#endregion

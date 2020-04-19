@@ -1,19 +1,30 @@
-<!-- Calendar Page, "data-name" contains page name -->
-<div data-name="Calendar" class="page">
-      
-    <!-- Top Navbar -->
-    <div class="navbar">
+
+<div data-name="units" class="page">
+
+  <!-- Top Navbar -->
+  <div class="navbar">
       <div class="navbar-bg"></div>
       <div class="navbar-inner">
-        <div class="title">CAS Planner</div>
+          <div class="title">Kurswahl</div>
       </div>
+  </div>
+
+  <!-- Bottom Toolbar -->
+  <div class="toolbar toolbar-bottom" style="--f7-toolbar-height: 70px;">
+    <div class="toolbar-inner toolbar-inner-big-Elements">
+        <!-- Toolbar links -->
+        <a href="javascript:showSelectedElements()" class="link"><i class="f7-icons" id="showSelectionButton" data-mode="all">checkmark_alt_circle</i></a>
+        <a href="javascript:auswahlInKalenderSpeichern()" class="link"><i class="f7-icons">calendar_badge_plus</i></a>
     </div>
+  </div>
 
-    <!-- Scrollable page content -->
-    <div class="page-content">
-       
+  <div class="page-content" style="padding-left: 0px; padding-right: 0px;">
+      <div class="list media-list">
+          <ul id="listUnits">
+            
+          </ul>
+      </div>
 
+  </div>
 
-        
-    </div>
 </div>

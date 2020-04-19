@@ -1,33 +1,33 @@
 var dualisOutput = [
     {
         "number": "T3M30305",
-        "name": "Fabrik- und Layoutplanung",
+        "name": "Fabrik/ und Layoutplanung",
         "units": [
             {
-                "unitname": "Fabrik- und Layoutplanung",
+                "unitname": "Fabrik/ und Layoutplanung",
                 "events": [
                     {
-                        "date": "2020-05-11",
+                        "date": "2020/05/11",
                         "destination": "Stuttgart"
                     },
                     {
-                        "date": "2020-05-12",
+                        "date": "2020/05/12",
                         "destination": "Stuttgart"
                     },
                     {
-                        "date": "2020-05-13",
+                        "date": "2020/05/13",
                         "destination": "Stuttgart"
                     },
                     {
-                        "date": "2020-06-25",
+                        "date": "2020/06/25",
                         "destination": "Stuttgart"
                     },
                     {
-                        "date": "2020-06-26",
+                        "date": "2020/06/26",
                         "destination": "Stuttgart"
                     },
                     {
-                        "date": "2020-06-27",
+                        "date": "2020/06/27",
                         "destination": "Stuttgart"
                     }
                 ]
@@ -42,23 +42,23 @@ var dualisOutput = [
                 "unitname": "Einf&uuml;hrung in die Konstruktionslehre I",
                 "events": [
                     {
-                        "date": "2020-06-29",
+                        "date": "2020/06/29",
                         "destination": "Stuttgart"
                     },
                     {
-                        "date": "2020-06-30",
+                        "date": "2020/06/30",
                         "destination": "Stuttgart"
                     },
                     {
-                        "date": "2020-07-01",
+                        "date": "2020/07/01",
                         "destination": "Stuttgart"
                     },
                     {
-                        "date": "2020-07-31",
+                        "date": "2020/07/31",
                         "destination": "Stuttgart"
                     },
                     {
-                        "date": "2020-08-01",
+                        "date": "2020/08/01",
                         "destination": "Stuttgart"
                     }
                 ]
@@ -70,35 +70,35 @@ var dualisOutput = [
         "name": " GM I: Anwendungsorientierte Forschung",
         "units": [
             {
-                "unitname": "GM I: Anwendungsorientierte Forschung (GBM, MKT - Gruppe A)",
+                "unitname": "GM I: Anwendungsorientierte Forschung (GBM, MKT / Gruppe A)",
                 "events": [
                     {
-                        "date": "2020-06-29",
+                        "date": "2020/06/29",
                         "destination": "Stuttgart"
                     },
                     {
-                        "date": "2020-06-30",
+                        "date": "2020/06/30",
                         "destination": "Stuttgart"
                     },
                     {
-                        "date": "2020-07-01",
+                        "date": "2020/07/01",
                         "destination": "Stuttgart"
                     },
                     {
-                        "date": "2020-07-02",
+                        "date": "2020/07/02",
                         "destination": "Stuttgart"
                     },
                     {
-                        "date": "2020-07-03",
+                        "date": "2020/07/03",
                         "destination": "Stuttgart"
                     }
                 ]
             },
             {
-                "unitname": "GM I: Anwendungsorientierte Forschung (GBM, MKT - Gruppe B)",
+                "unitname": "GM I: Anwendungsorientierte Forschung (GBM, MKT / Gruppe B)",
                 "events": [
                     {
-                        "date": "2020-06-22",
+                        "date": "2020/06/22",
                         "destination": "Stuttgart"
                     }
                 ]
@@ -107,7 +107,7 @@ var dualisOutput = [
                 "unitname": "GM I: Anwendungsorientierte Forschung (MDM, PO)",
                 "events": [
                     {
-                        "date": "2020-06-29",
+                        "date": "2020/06/29",
                         "destination": "Stuttgart"
                     }
                 ]
@@ -119,19 +119,19 @@ var dualisOutput = [
         "name": " GM I: Anwendungsorientierte Forschung",
         "units": [
             {
-                "unitname": "GM I: Anwendungsorientierte Forschung (GBM, MKT - Gruppe A)",
+                "unitname": "GM I: Anwendungsorientierte Forschung (GBM, MKT / Gruppe A)",
                 "events": [
                     {
-                        "date": "2020-06-29",
+                        "date": "2020/06/29",
                         "destination": "Stuttgart"
                     }
                 ]
             },
             {
-                "unitname": "GM I: Anwendungsorientierte Forschung (GBM, MKT - Gruppe B)",
+                "unitname": "GM I: Anwendungsorientierte Forschung (GBM, MKT / Gruppe B)",
                 "events": [
                     {
-                        "date": "2020-06-29",
+                        "date": "2020/06/29",
                         "destination": "Stuttgart"
                     }
                 ]
@@ -140,7 +140,7 @@ var dualisOutput = [
                 "unitname": "GM I: Anwendungsorientierte Forschung (MDM, PO)",
                 "events": [
                     {
-                        "date": "2020-06-29",
+                        "date": "2020/06/29",
                         "destination": "Stuttgart"
                     }
                 ]

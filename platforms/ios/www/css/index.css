@@ -130,5 +130,7 @@ h1 {
 }
 
 .list .item-subtitle{
-    white-space: normal;
+    white-space: normal !important;
 }
+
+.size-22 { font-size: 22px !important}

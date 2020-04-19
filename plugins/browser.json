@@ -15,6 +15,9 @@
     },
     "cordova-plugin-device": {
       "PACKAGE_NAME": "www.famlovric.de"
+    },
+    "cordova-plugin-browsersync-gen2": {
+      "PACKAGE_NAME": "www.famlovric.de"
     }
   },
   "dependent_plugins": {}
