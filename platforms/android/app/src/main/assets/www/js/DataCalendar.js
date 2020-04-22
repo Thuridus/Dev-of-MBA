@@ -21,7 +21,7 @@ var DataCalendar = function(){
 var jsonSteuertabelle = [
     {"monat": "Januar", "numberDays": "31"},
     {"monat": "Februar", "numberDays": "29"},
-    {"monat": "M&aumlrz", "numberDays": "31"},
+    {"monat": "Maerz", "numberDays": "31"},
     {"monat": "April", "numberDays": "30"},
     {"monat": "Mai", "numberDays": "31"},
     {"monat": "Juni", "numberDays": "30"},
@@ -52,8 +52,8 @@ DataCalendar.prototype.insertDataIntoDataCalendar = function(){
         // Name des SubElements zuordnen
         unit.name = element.unitname;
         // Für jedes Event ein Unterobjekt mit den Parametern Datum und Ort erstellen
-        for (k in element.events){
-            unit.events.push(new jsonLectureEvent(element.events[k].date, element.events[k].destination));
+        for (var date in element.events){
+            unit.events.push(element.events[date]);
         }
         // Element einmal zum Terminarray Eintragen und zusätzlich pro Event in den Kalender
         this.terminArray.push(unit);
@@ -73,7 +73,7 @@ DataCalendar.prototype.addTerminToFikitvCalendar = function(event){
 }
 DataCalendar.prototype.addUnitToFikitvCalendar = function(unit){
     for(index in unit.events){
-        var date = new Date(unit.events[index].date);
+        var date = new Date(unit.events[index]);
         var tag = returnElement(this.kalenderJSON, date.getFullYear());
         if(tag != null){
             tag = tag.monate[date.getMonth()].tage[date.getDate() -1];
@@ -90,7 +90,7 @@ DataCalendar.prototype.checkForConflicts = function(){
             // Prüfung für jeden Tag im Termin
             for (var date in this.terminArray[index].events){
                 // Wenn mehr als ein Termin aktiv ist soll der Status auf 
-                if(this.checkAktiveEvents(this.terminArray[index].events[date].date) > 1){
+                if(this.checkAktiveEvents(this.terminArray[index].events[date]) > 1){
                     conflictState = true;
                 }
             }
@@ -115,4 +115,12 @@ DataCalendar.prototype.checkAktiveEvents = function(date){
     }
     // Zähler zurückgegeben
     return activeEvent;
+}
+DataCalendar.prototype.getTagElement = function(date){
+    date = new Date(date);
+    var tag = returnElement(this.kalenderJSON, date.getFullYear());
+    if(tag != null){
+        tag = tag.monate[date.getMonth()].tage[date.getDate() -1];
+    }
+    return tag;
 }

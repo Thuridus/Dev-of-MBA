@@ -29,6 +29,11 @@ var app = new Framework7({
   name: 'CAS Planner',
   // App id
   id: 'www.famlovric.CAS_Planner',
+  dialog: {
+    title: 'Speichern',
+    buttonOk: 'Weiter',
+    buttonCancel: 'Abbrechen'
+  },
   routes:[
     {   
       path: '/login/',
@@ -63,6 +68,7 @@ var app = new Framework7({
 
 */
 var dataCalendar = new DataCalendar();
+var androidCASPlanner_AndroidID;
 var mainView = app.views.create('.view-main');
 var navbarTooltip = app.tooltip.create({
   targetEl: '.navbar-tooltip',
@@ -72,10 +78,15 @@ var toastNoCalendar = app.toast.create({
   text: 'Es wurde kein Kalender f&uuml;r den Abgleich ausgew&auml;hlt.',
   closeButton: true,
 });
+var conflictOverview = app.popup.create({
+  el: '.popup-swipe-to-close-handler',
+  swipeToClose: true,
+  swipeHandler: '.custom-swipe-to-close-handler',
+});
+
 
 // Call first Page init()
 initHomepage();
-
 
 $$(document).on('page:init', '.page[data-name="datapage"]', initDatapage);
 $$(document).on('page:init', '.page[data-name="login"]', initHomepage);
@@ -87,7 +98,7 @@ toastNoCalendar.on("close", function(){
 });
 
 document.addEventListener("backbutton", function(){
-  if(!preloader.closed){
+  if(!preloader.closed && !preloader.destroyed){
     preloader.close();
   }
   app.views.get('.view-main').router.back();
@@ -215,9 +226,50 @@ function dayCountOnEvent(event){
   do{
     event.days.push(new Date(startDate));
     startDate.setDate(startDate.getDate() + 1);
-  }while((endDate - startDate) >= 0);
+  }while((endDate - startDate) > 0);
   return event;
 }
+
+function auswahlInKalenderSpeichern(){
+  app.dialog.confirm('Wollen Sie die ausgew&auml;hlten Vorlesungen im Kalender speichern?', function () {
+    window.plugins.calendar.listCalendars(function(response){
+      var calendarID;
+      for(var i in response){
+        if(response[i].name == "CAS Planner"){
+          calendarID = response[i].id;
+        }
+      }
+      if(calendarID == null){
+        var createCalOptions = window.plugins.calendar.getCreateCalendarOptions();
+        createCalOptions.calendarName = "CAS Planner";
+        window.plugins.calendar.createCalendar(createCalOptions,(e) => safeTermineToCASPlanner(e),null);
+      }else{
+        safeTermineToCASPlanner(calendarID);
+      }
+    },null);
+  }, null);
+}
+
+function safeTermineToCASPlanner(calendarID){
+  for(var i in dataCalendar.terminArray){
+    var termin = dataCalendar.terminArray[i];
+    if(termin.state){
+      var name = termin.number + ": " + termin.name;
+      for(var j in termin.events){
+        var startDate = new Date(termin.events[j]);
+        var endDate = new Date(new Date(startDate).setDate(startDate.getDate() + 1));
+        //window.plugins.calendar.createEventInNamedCalendar(name, "", "", startDate, endDate, "CAS Planner",  (e) => console.log(e), err => console.error([name, startDate, endDate]));
+        var calOptions = window.plugins.calendar.getCalendarOptions(); // grab the defaults
+        calOptions.firstReminderMinutes = null;
+        calOptions.calendarName = "CAS Planner"; // IOS
+        calOptions.calendarId = calendarID; // Android
+        window.plugins.calendar.createEventWithOptions(name, "", "", startDate, endDate, calOptions,  (e) => console.log(e), err => console.error([name, startDate, endDate]));
+      }
+    }
+  }
+  app.dialog.alert("Die Termine wurden im Kalender: CAS Planner gespeichert");
+}
+
 //#endregion
 
 /***********************************************************************************************************************
@@ -226,6 +278,10 @@ function dayCountOnEvent(event){
 //#region 
 
 function initUnitpage(){
+  app.tooltip.create({
+    targetEl: '.unit-navbar-tooltip',
+    text: 'Terminkonflikte werden entsprechend<br>gekennzeichnet. Lange dr&uuml;cken f&uuml;r<br>Detailansicht.'
+  });
   // Schleife über alle Vorlesungseinheiten im JSON-Array
   for(count in dualisOutput){
     // Anzahl der Unterelemente prüfen
@@ -312,6 +368,49 @@ function markUnitAsConflict(obj, state){
       element.getElementsByClassName("item-after")[0].innerHTML = '';
     }
   }
+}
+
+function showConflicOverview(element){
+  conflictOverview.open();
+  document.getElementById("conflictSwiperContent").innerHTML = "";
+  if(element.getAttribute("data-level") == "TOP"){
+    for (var i in dualisOutput[element.value].units){
+      getDaysForConflicOverview(element.value, i);
+      document.getElementById("conflictSwiperContent").appendChild(document.createElement("hr"));
+    }
+  }else{
+    var IDs = element.value.split("_");
+    getDaysForConflicOverview(IDs[0], IDs[1]);
+  }
+}
+
+function getDaysForConflicOverview(topID, subID){
+  for(var entry in dataCalendar.terminArray){
+    var eintrag = dataCalendar.terminArray[entry]
+    if(eintrag.topID == topID && eintrag.subID == subID){
+      for (var day in eintrag.events){
+        var topLevelEntry = createTopElementOverview(eintrag.events[day], eintrag.number, eintrag.name);
+        topLevelEntry.getElementsByClassName("subElementConflictContent")[0].innerHTML =  getConflictElements(eintrag.events[day], topID, subID);
+        document.getElementById("conflictSwiperContent").appendChild(topLevelEntry);
+      }
+    }
+  }
+}
+
+function getConflictElements(day, topID, subID){
+  var content = "";
+  var tag = dataCalendar.getTagElement(day);
+  for(var termin in tag.termine){
+    if(tag.termine[termin].state && !(tag.termine[termin].topID == topID && tag.termine[termin].subID == subID)){
+      if(tag.termine[termin].number == null){
+        content = content + createSubEventOverview(tag.termine[termin].title);
+      }else{
+        content = content + createSubUnitOverview(tag.termine[termin].number, tag.termine[termin].name);
+      }
+    }
+  }
+  return content;
+
 }
 
 //#endregion

@@ -5,32 +5,7 @@ var dualisOutput = [
         "units": [
             {
                 "unitname": "Fabrik/ und Layoutplanung",
-                "events": [
-                    {
-                        "date": "2020/05/11",
-                        "destination": "Stuttgart"
-                    },
-                    {
-                        "date": "2020/05/12",
-                        "destination": "Stuttgart"
-                    },
-                    {
-                        "date": "2020/05/13",
-                        "destination": "Stuttgart"
-                    },
-                    {
-                        "date": "2020/06/25",
-                        "destination": "Stuttgart"
-                    },
-                    {
-                        "date": "2020/06/26",
-                        "destination": "Stuttgart"
-                    },
-                    {
-                        "date": "2020/06/27",
-                        "destination": "Stuttgart"
-                    }
-                ]
+                "events": ["2020/05/10", "2020/05/11", "2020/05/12"]
             }
         ]
     },
@@ -40,28 +15,7 @@ var dualisOutput = [
         "units": [
             {
                 "unitname": "Einf&uuml;hrung in die Konstruktionslehre I",
-                "events": [
-                    {
-                        "date": "2020/06/29",
-                        "destination": "Stuttgart"
-                    },
-                    {
-                        "date": "2020/06/30",
-                        "destination": "Stuttgart"
-                    },
-                    {
-                        "date": "2020/07/01",
-                        "destination": "Stuttgart"
-                    },
-                    {
-                        "date": "2020/07/31",
-                        "destination": "Stuttgart"
-                    },
-                    {
-                        "date": "2020/08/01",
-                        "destination": "Stuttgart"
-                    }
-                ]
+                "events": ["2020/05/31", "2020/06/01"]
             }
         ]
     },
@@ -71,46 +25,15 @@ var dualisOutput = [
         "units": [
             {
                 "unitname": "GM I: Anwendungsorientierte Forschung (GBM, MKT / Gruppe A)",
-                "events": [
-                    {
-                        "date": "2020/06/29",
-                        "destination": "Stuttgart"
-                    },
-                    {
-                        "date": "2020/06/30",
-                        "destination": "Stuttgart"
-                    },
-                    {
-                        "date": "2020/07/01",
-                        "destination": "Stuttgart"
-                    },
-                    {
-                        "date": "2020/07/02",
-                        "destination": "Stuttgart"
-                    },
-                    {
-                        "date": "2020/07/03",
-                        "destination": "Stuttgart"
-                    }
-                ]
+                "events": ["2020/06/01", "2020/06/02"]
             },
             {
                 "unitname": "GM I: Anwendungsorientierte Forschung (GBM, MKT / Gruppe B)",
-                "events": [
-                    {
-                        "date": "2020/06/22",
-                        "destination": "Stuttgart"
-                    }
-                ]
+                "events": ["2020/06/03", "2020/06/04"]
             },
             {
                 "unitname": "GM I: Anwendungsorientierte Forschung (MDM, PO)",
-                "events": [
-                    {
-                        "date": "2020/06/29",
-                        "destination": "Stuttgart"
-                    }
-                ]
+                "events": ["2020/07/01", "2020/07/02"]
             }
         ]
     },
@@ -120,30 +43,15 @@ var dualisOutput = [
         "units": [
             {
                 "unitname": "GM I: Anwendungsorientierte Forschung (GBM, MKT / Gruppe A)",
-                "events": [
-                    {
-                        "date": "2020/06/29",
-                        "destination": "Stuttgart"
-                    }
-                ]
+                "events": ["2021/01/01", "2021/01/02"]
             },
             {
                 "unitname": "GM I: Anwendungsorientierte Forschung (GBM, MKT / Gruppe B)",
-                "events": [
-                    {
-                        "date": "2020/06/29",
-                        "destination": "Stuttgart"
-                    }
-                ]
+                "events": ["2020/08/08", "2020/08/09"]
             },
             {
                 "unitname": "GM I: Anwendungsorientierte Forschung (MDM, PO)",
-                "events": [
-                    {
-                        "date": "2020/06/29",
-                        "destination": "Stuttgart"
-                    }
-                ]
+                "events": ["2020/07/20", "2020/07/25"]
             }
         ]
     }

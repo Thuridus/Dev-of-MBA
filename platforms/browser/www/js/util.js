@@ -20,9 +20,6 @@ function jsonEvent(){
 function jsonUnit(topID, subID){
     return {"topID":topID, "subID":subID, "number":"", "name":"", "state":false, "events":[]};
 }
-function jsonLectureEvent(date, destination){
-    return {"date": date, "destination":destination};
-}
 function jsonYahr(jahr){
     return {"id":jahr, "monate": []}; 
 }
@@ -80,6 +77,33 @@ function createSubLevelCheckbox(topIndex, subIndex, number, name){
         </label>`;
     return element;
 }
+function createTopElementOverview(date, number, name){
+    var element = document.createElement("div");
+    element.setAttribute("class","card");
+    element.innerHTML =`   
+            <div class="card-header">${date}</div>
+            <div class="card-content card-content-padding">
+                <div class="vorlesungsMainElement">
+                    <span><b>${number}</b> </span>
+                    <span>${name}</span>
+                </div>
+                <div class="subElementConflictContent"></div>
+            </div>`;
+    return element;
+}
+function createSubUnitOverview(number, name){
+    return `<hr/>
+            <div class="vorlesungsSubElement">
+                <span><b>${number}</b></span><span>${name}</span>
+            </div>`;
+}
+function createSubEventOverview(name){
+    return `<hr/>
+            <div class="vorlesungsSubElement">
+                <span>${name}</span>
+            </div>`;
+}
+
 //#endregion
 
 /***********************************************************************************************************************
@@ -114,5 +138,13 @@ function addCustomChangeListener(){
         }
         //Hinzufügen bzw. Entfernen der Termine aus dem fiktiven Kalender
         changeSubUnitEntry(e.target.value, e.target.checked);
+    });
+
+    $$(".item-content").on("taphold", function(e){
+        var element = e.target;
+        while(element.tagName != "LABEL"){
+            element = element.parentNode;
+        }
+        showConflicOverview(element.firstElementChild);
     });
 }

@@ -25,7 +25,7 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-eval' data: gap: https://ssl.gstatic.com 'unsafe-inline' ws: 'unsafe-inline' ws: 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:; script-src 'self' 'unsafe-inline' http://localhost:3000 http://192.168.178.88:3000 'self' 'unsafe-inline' http://localhost:3000 http://192.168.178.88:3000;">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-eval' data: gap: https://ssl.gstatic.com 'unsafe-inline' ws: 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:; script-src 'self' 'unsafe-inline' http://localhost:3000 http://192.168.178.88:3000;">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
@@ -54,9 +54,20 @@
                   </div>
                 </div>
               </div>
-    
+              
+              <div class="popup popup-swipe-to-close-handler">
+                <div class="block">
+                  <p class="custom-swipe-to-close-handler">
+                    <i class="f7-icons">chevron_down_circle</i>
+                  </p>
+                  <p id="conflictSwiperContent">
+                    
+                  </p>
+                </div>
+              </div>
+
               <!-- Scrollable page content -->
-              <div class="page-content with-padding">
+              <div class="page-content with-padding">    
                 <!-- Logo im oberen Bereich des Fensters -->
                 <div id="login-icon">
                   <img src="./img/DHBW_CAS_LOGO.svg">

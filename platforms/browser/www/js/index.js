@@ -72,10 +72,15 @@ var toastNoCalendar = app.toast.create({
   text: 'Es wurde kein Kalender f&uuml;r den Abgleich ausgew&auml;hlt.',
   closeButton: true,
 });
+var conflictOverview = app.popup.create({
+  el: '.popup-swipe-to-close-handler',
+  swipeToClose: true,
+  swipeHandler: '.custom-swipe-to-close-handler',
+});
+
 
 // Call first Page init()
 initHomepage();
-
 
 $$(document).on('page:init', '.page[data-name="datapage"]', initDatapage);
 $$(document).on('page:init', '.page[data-name="login"]', initHomepage);
@@ -312,6 +317,48 @@ function markUnitAsConflict(obj, state){
       element.getElementsByClassName("item-after")[0].innerHTML = '';
     }
   }
+}
+
+function showConflicOverview(element){
+  conflictOverview.open();
+  document.getElementById("conflictSwiperContent").innerHTML = "";
+  if(element.getAttribute("data-level") == "TOP"){
+    for (var i in dualisOutput[element.value].units){
+      getDaysForConflicOverview(element.value, i);
+    }
+  }else{
+    var IDs = element.value.split("_");
+    getDaysForConflicOverview(IDs[0], IDs[1]);
+  }
+}
+
+function getDaysForConflicOverview(topID, subID){
+  for(var entry in dataCalendar.terminArray){
+    var eintrag = dataCalendar.terminArray[entry]
+    if(eintrag.topID == topID && eintrag.subID == subID){
+      for (var day in eintrag.events){
+        var topLevelEntry = createTopElementOverview(eintrag.events[day], eintrag.number, eintrag.name);
+        topLevelEntry.getElementsByClassName("subElementConflictContent")[0].innerHTML =  getConflictElements(eintrag.events[day], topID, subID);
+        document.getElementById("conflictSwiperContent").appendChild(topLevelEntry);
+      }
+    }
+  }
+}
+
+function getConflictElements(day, topID, subID){
+  var content = "";
+  var tag = dataCalendar.getTagElement(day);
+  for(var termin in tag.termine){
+    if(tag.termine[termin].state && !(tag.termine[termin].topID == topID && tag.termine[termin].subID == subID)){
+      if(tag.termine[termin].number == null){
+        content = content + createSubEventOverview(tag.termine[termin].title);
+      }else{
+        content = content + createSubUnitOverview(tag.termine[termin].number, tag.termine[termin].name);
+      }
+    }
+  }
+  return content;
+
 }
 
 //#endregion

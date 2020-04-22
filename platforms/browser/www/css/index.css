@@ -134,3 +134,24 @@ h1 {
 }
 
 .size-22 { font-size: 22px !important}
+
+
+.vorlesungsMainElement{
+    text-transform: none;
+}
+.vorlesungsSubElement{
+    text-transform: none;
+    padding-left: 20px;
+    border-left: 2px solid red;
+}
+.location{
+    margin-top: 10px;
+    margin-left: 10px;
+    color: grey;
+}
+
+.card-header{
+    background: rgba(227, 6, 19, 1);
+    color: white;
+    font-weight: bold;
+}
